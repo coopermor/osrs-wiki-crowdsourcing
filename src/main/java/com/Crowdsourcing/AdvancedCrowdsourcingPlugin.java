@@ -20,6 +20,7 @@ import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
 import com.Crowdsourcing.shootingstars.CrowdsourcingStars;
+import com.Crowdsourcing.statchange.CrowdsourcingStatChange;
 import com.Crowdsourcing.toa.CrowdsourcingTombs;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import com.Crowdsourcing.impling.CrowdsourcingImpling;
@@ -122,6 +123,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingDoomOfMokhaiotl doomOfMokhaiotl;
 
+	@Inject
+	private CrowdsourcingStatChange statChange;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -146,6 +150,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(impling);
 		eventBus.register(stars);
 		eventBus.register(doomOfMokhaiotl);
+		eventBus.register(statChange);
 
 		varbits.startUp();
 		experience.startUp();
@@ -177,6 +182,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(impling);
 		eventBus.unregister(stars);
 		eventBus.unregister(doomOfMokhaiotl);
+		eventBus.unregister(statChange);
 
 		varbits.shutDown();
 		stars.reset();
