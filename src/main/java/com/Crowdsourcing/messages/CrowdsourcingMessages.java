@@ -166,10 +166,10 @@ public class CrowdsourcingMessages
 	private static final String BLANK_RUNE_SUCCESS = "You manage to shape the rune essence into the desired shape.";
 	private static final String BLANK_RUNE_FAILURE = "You attempt to craft the stone but fail, destroying the essence.";
 
-  // Hallowed Sepulchre coffins
-  private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
-  private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
-  private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
+	// Hallowed Sepulchre coffins
+	private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
+	private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
+	private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
 
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
@@ -376,29 +376,29 @@ public class CrowdsourcingMessages
 			return createSkillMap(Skill.CRAFTING);
 		}
 
-    if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
-    {
-      boolean hasLockpick = false;
-      boolean hasStrangeOldLockpick = false;
-      ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
-      if (equipContainer != null)
-      {
-        final Item[] items = equipContainer.getItems();
-        for (Item item : items)
-        {
-          if (item.getId() == ItemID.LOCKPICK)
-            hasLockpick = true;
-          if (item.getId() == ItemID.STRANGE_OLD_LOCKPICK || item.getId() == ItemID.STRANGE_OLD_LOCKPICK_FULL)
-            hasStrangeOldLockpick = true;
-        }
-        HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
-        h.put("Lockpick", hasLockpick);
-        h.put("StrangeLockpick", hasStrangeOldLockpick);
-        return h;
-      }
-    }
+		if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
+		{
+			boolean hasLockpick = false;
+			boolean hasStrangeOldLockpick = false;
+			ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
+			if (equipContainer != null)
+			{
+				final Item[] items = equipContainer.getItems();
+				for (Item item : items)
+				{
+					if (item.getId() == ItemID.LOCKPICK)
+						hasLockpick = true;
+					if (item.getId() == ItemID.STRANGE_OLD_LOCKPICK || item.getId() == ItemID.STRANGE_OLD_LOCKPICK_FULL)
+						hasStrangeOldLockpick = true;
+				}
+				HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
+				h.put("Lockpick", hasLockpick);
+				h.put("StrangeLockpick", hasStrangeOldLockpick);
+				return h;
+			}
+		}
 
-		return null;
+	return null;
 	}
 
 	@Subscribe

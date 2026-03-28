@@ -64,7 +64,8 @@ public class CrowdsourcingOverheadDialogue
 		}
 
 		@Override
-		public int hashCode() {
+		public int hashCode()
+		{
 			int hash = 17;
 			hash = hash * 486187739 + this.npcId;
 			hash = hash * 486187739 + this.text.hashCode();

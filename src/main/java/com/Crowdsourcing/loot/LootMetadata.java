@@ -64,10 +64,10 @@ public class LootMetadata
 		return Map.of(
 			"easy", isClaimed.apply(VarbitID.CA_TIER_STATUS_EASY),
 			"medium", isClaimed.apply(VarbitID.CA_TIER_STATUS_MEDIUM),
-			"hard",isClaimed.apply(VarbitID.CA_TIER_STATUS_HARD),
-			"elite",isClaimed.apply(VarbitID.CA_TIER_STATUS_ELITE),
-			"master",isClaimed.apply(VarbitID.CA_TIER_STATUS_MASTER),
-			"grandmaster",isClaimed.apply(VarbitID.CA_TIER_STATUS_GRANDMASTER)
+			"hard", isClaimed.apply(VarbitID.CA_TIER_STATUS_HARD),
+			"elite", isClaimed.apply(VarbitID.CA_TIER_STATUS_ELITE),
+			"master", isClaimed.apply(VarbitID.CA_TIER_STATUS_MASTER),
+			"grandmaster", isClaimed.apply(VarbitID.CA_TIER_STATUS_GRANDMASTER)
 		);
 	}
 
@@ -156,19 +156,19 @@ public class LootMetadata
 
 	public static HashMap<String, Object> getMap(Client client, Object lootTrackerMetadata)
 	{
-		return new HashMap<>() {{
-			put("location", getLocation(client));
-			put("tick", getTick(client));
-			put("combatAchievements", getCombatAchievements(client));
-			put("clueWarnings", getClueWarnings(client));
-			put("wornItems", getWornItems(client));
-			put("slayerTaskID", getSlayerTaskID(client));
-			put("slayerBossTaskID", getSlayerBossTaskID(client));
-			put("slayerTaskRemainingCount", getSlayerTaskRemainingCount(client));
-			put("slayerMasterID", getSlayerMasterID(client));
-			put("worldTypes", getWorldTypes(client));
-			put("worldNumber", getWorldNumber(client));
-			put("lootTrackerMetadata", lootTrackerMetadata != null ? lootTrackerMetadata : -1);
-		}};
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("location", getLocation(client));
+		map.put("tick", getTick(client));
+		map.put("combatAchievements", getCombatAchievements(client));
+		map.put("clueWarnings", getClueWarnings(client));
+		map.put("wornItems", getWornItems(client));
+		map.put("slayerTaskID", getSlayerTaskID(client));
+		map.put("slayerBossTaskID", getSlayerBossTaskID(client));
+		map.put("slayerTaskRemainingCount", getSlayerTaskRemainingCount(client));
+		map.put("slayerMasterID", getSlayerMasterID(client));
+		map.put("worldTypes", getWorldTypes(client));
+		map.put("worldNumber", getWorldNumber(client));
+		map.put("lootTrackerMetadata", lootTrackerMetadata != null ? lootTrackerMetadata : -1);
+		return map;
 	}
 }

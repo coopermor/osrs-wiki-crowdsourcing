@@ -15,10 +15,12 @@ import net.runelite.client.eventbus.Subscribe;
 @Slf4j
 public class CrowdsourcingQuestLog
 {
-	static class VarTuple {
+	static class VarTuple
+	{
 		public final int varType;
 		public final int varIndex;
-		public VarTuple(int varType, int varIndex) {
+		public VarTuple(int varType, int varIndex)
+		{
 			this.varType = varType;
 			this.varIndex = varIndex;
 		}
@@ -201,8 +203,10 @@ public class CrowdsourcingQuestLog
 
 		// Concat the strs and append a newline between each widget (since they are on different lines
 		StringBuilder s = new StringBuilder();
-		if (w.getStaticChildren() != null) {
-			for(Widget child : children) {
+		if (w.getStaticChildren() != null)
+		{
+			for (Widget child : children)
+			{
 				s.append(child.getText());
 				s.append('\n');
 			}
@@ -212,7 +216,7 @@ public class CrowdsourcingQuestLog
 		Widget titleWidget = client.getWidget(InterfaceID.Questjournal.TITLE);
 		if (titleWidget == null || titleWidget.getText() == null)
 			return;
-		String key = titleWidget.getText().substring("<col=7f0000>".length(), titleWidget.getText().length()-6);
+		String key = titleWidget.getText().substring("<col=7f0000>".length(), titleWidget.getText().length() - 6);
 		if (CrowdsourcingQuestLog.questVarbs.containsKey(key))
 		{
 			// If this is a quest other than SOA, send in data for the main quest progress var.
@@ -232,7 +236,8 @@ public class CrowdsourcingQuestLog
 			manager.storeEvent(data);
 			manager.storeEvent(data2);
 		}
-		else {
+		else
+		{
 			log.debug("No match! " + key);
 		}
 	}

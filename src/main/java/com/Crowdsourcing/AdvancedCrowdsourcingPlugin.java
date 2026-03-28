@@ -111,7 +111,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingImpling impling;
 
-  	@Inject
+	@Inject
 	private CrowdsourcingPyramidPlunder pyramidPlunder;
 
 	@Inject
@@ -202,7 +202,8 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	public void onCommandExecuted(CommandExecuted commandExecuted)
 	{
 		String cmd = commandExecuted.getCommand();
-		switch (cmd) {
+		switch (cmd)
+		{
 			case "respawnon":
 				eventBus.register(respawns);
 				manager.sendMessage("Turned on respawns logger.");

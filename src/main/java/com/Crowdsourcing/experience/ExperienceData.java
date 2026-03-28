@@ -5,7 +5,6 @@ import lombok.Data;
 import net.runelite.api.MenuAction;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.MenuOptionClicked;
 
 @Data
 @AllArgsConstructor

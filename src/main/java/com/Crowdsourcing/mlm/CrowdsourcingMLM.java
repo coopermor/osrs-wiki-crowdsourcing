@@ -82,7 +82,8 @@ public class CrowdsourcingMLM
 			return;
 		}
 
-		if (!waitingForOre) {
+		if (!waitingForOre)
+		{
 			return;
 		}
 
@@ -93,7 +94,8 @@ public class CrowdsourcingMLM
 			return;
 		}
 
-		if (widgetSpriteText.getText().startsWith(COLLECT_ORE_FROM_SACK)) {
+		if (widgetSpriteText.getText().startsWith(COLLECT_ORE_FROM_SACK))
+		{
 			waitingForOre = false;
 			final Multiset<Integer> currentInventorySnapshot = getInventorySnapshot();
 			final Multiset<Integer> rewards = Multisets.difference(currentInventorySnapshot, prevInventorySnapshot);
@@ -112,7 +114,8 @@ public class CrowdsourcingMLM
 	public void onMenuOptionClicked(MenuOptionClicked menuOptionClicked)
 	{
 		MenuAction menuAction = menuOptionClicked.getMenuAction();
-		if (menuOptionClicked.getId() == SACK_ID && menuAction == MenuAction.GAME_OBJECT_FIRST_OPTION) {
+		if (menuOptionClicked.getId() == SACK_ID && menuAction == MenuAction.GAME_OBJECT_FIRST_OPTION)
+		{
 			prevInventorySnapshot = getInventorySnapshot();
 			waitingForOre = true;
 		}
@@ -174,6 +177,6 @@ public class CrowdsourcingMLM
 		int hard = client.getVarbitValue(VarbitID.FALADOR_DIARY_HARD_COMPLETE);
 		int elite = client.getVarbitValue(VarbitID.FALADOR_DIARY_ELITE_COMPLETE);
 
-		return easy + 2*medium + 4*hard + 8*elite;
+		return easy + 2 * medium + 4 * hard + 8 * elite;
 	}
 }

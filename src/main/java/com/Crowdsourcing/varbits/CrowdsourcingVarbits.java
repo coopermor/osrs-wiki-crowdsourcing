@@ -103,7 +103,8 @@ public class CrowdsourcingVarbits
 		System.arraycopy(client.getVarps(), 0, oldVarps2, 0, oldVarps2.length);
 
 		// For all varbits, add their ids to the multimap with the varp index as their key
-		clientThread.invoke(() -> {
+		clientThread.invoke(() ->
+		{
 			if (client.getIndexConfig() == null)
 			{
 				return false;
@@ -202,7 +203,8 @@ public class CrowdsourcingVarbits
 		// Push out varp changes
 		if (oldValue != newValue && tick > initializingTick)
 		{
-			clientThread.invokeLater(() -> {
+			clientThread.invokeLater(() ->
+			{
 				LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
 				WorldPoint location = BoatLocation.fromLocal(client, local);
 				boolean isInInstance = client.isInInstancedRegion();

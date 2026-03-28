@@ -9,8 +9,8 @@ import net.runelite.api.coords.WorldPoint;
 @AllArgsConstructor
 public class InventoryData
 {
-    private int id;
-    private Item[] items;
-    private WorldPoint location;
-    private boolean isIronman;
+	private int id;
+	private Item[] items;
+	private WorldPoint location;
+	private boolean isIronman;
 }

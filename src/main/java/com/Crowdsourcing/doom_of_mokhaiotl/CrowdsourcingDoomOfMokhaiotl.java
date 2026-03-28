@@ -1,9 +1,7 @@
 package com.Crowdsourcing.doom_of_mokhaiotl;
 
 import com.Crowdsourcing.CrowdsourcingManager;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.runelite.api.ChatMessageType;
@@ -74,7 +72,7 @@ public class CrowdsourcingDoomOfMokhaiotl
 	@Subscribe
 	public void onChatMessage(ChatMessage chatMessage)
 	{
-		if(chatMessage.getType() == ChatMessageType.GAMEMESSAGE && chatMessage.getMessage().contains("Delve level: 1"))
+		if (chatMessage.getType() == ChatMessageType.GAMEMESSAGE && chatMessage.getMessage().contains("Delve level: 1"))
 		{
 			lootByWave.clear();
 		}

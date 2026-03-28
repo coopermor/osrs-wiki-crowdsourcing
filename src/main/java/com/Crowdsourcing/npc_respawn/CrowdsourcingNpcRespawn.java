@@ -17,87 +17,92 @@ import net.runelite.client.eventbus.Subscribe;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class CrowdsourcingNpcRespawn {
+public class CrowdsourcingNpcRespawn
+{
 
-    private static final int MAX_ACTOR_VIEW_RANGE = 15;
-    private WorldPoint lastPlayerLocation;
-    private HashMap<Integer, Integer> npcDespawnTimes = new HashMap<>();
-    private HashSet<Integer> seenNpcs = new HashSet<>();
-    private boolean logging = false;
+	private static final int MAX_ACTOR_VIEW_RANGE = 15;
+	private WorldPoint lastPlayerLocation;
+	private HashMap<Integer, Integer> npcDespawnTimes = new HashMap<>();
+	private HashSet<Integer> seenNpcs = new HashSet<>();
+	private boolean logging = false;
 
-    @Inject
-    private Client client;
+	@Inject
+	private Client client;
 
-    @Inject
-    public CrowdsourcingManager manager;
+	@Inject
+	public CrowdsourcingManager manager;
 
-    public void setLogging(boolean logging)
-    {
-        this.logging = logging;
-    }
+	public void setLogging(boolean logging)
+	{
+		this.logging = logging;
+	}
 
-    private static boolean isInViewRange(WorldPoint wp1, WorldPoint wp2)
-    {
-        int distance = wp1.distanceTo(wp2);
-        return distance < MAX_ACTOR_VIEW_RANGE;
-    }
+	private static boolean isInViewRange(WorldPoint wp1, WorldPoint wp2)
+	{
+		int distance = wp1.distanceTo(wp2);
+		return distance < MAX_ACTOR_VIEW_RANGE;
+	}
 
-    @Subscribe
-    public void onGameTick(GameTick event)
-    {
-        lastPlayerLocation = client.getLocalPlayer().getWorldLocation();
-    }
+	@Subscribe
+	public void onGameTick(GameTick event)
+	{
+		lastPlayerLocation = client.getLocalPlayer().getWorldLocation();
+	}
 
-    @Subscribe
-    public void onNpcSpawned(NpcSpawned npcSpawned)
-    {
-        final NPC npc = npcSpawned.getNpc();
-        int index = npc.getIndex();
-        if (!npcDespawnTimes.containsKey(index)) {
-            return;
-        }
+	@Subscribe
+	public void onNpcSpawned(NpcSpawned npcSpawned)
+	{
+		final NPC npc = npcSpawned.getNpc();
+		int index = npc.getIndex();
+		if (!npcDespawnTimes.containsKey(index))
+		{
+			return;
+		}
 
-        if (lastPlayerLocation != null && isInViewRange(lastPlayerLocation, npc.getWorldLocation())) {
-            int respawnTime = client.getTickCount() - npcDespawnTimes.get(index);
-            LocalPoint local = LocalPoint.fromWorld(client, npc.getWorldLocation());
-            WorldPoint location = null;
-            boolean isInInstance = false;
-            if (local != null)
-            {
-                location = BoatLocation.fromLocal(client, local);
-                isInInstance = client.isInInstancedRegion();
-            }
-            manager.storeEvent(new NpcRespawnData(index, npc.getId(), respawnTime, location, isInInstance));
-            if (logging)
-            {
-                manager.sendMessage(String.format("NPC %d: %d ticks", npc.getId(), respawnTime+1));
-            }
-            seenNpcs.add(index);
-            npcDespawnTimes.remove(index);
-        }
-    }
+		if (lastPlayerLocation != null && isInViewRange(lastPlayerLocation, npc.getWorldLocation()))
+		{
+			int respawnTime = client.getTickCount() - npcDespawnTimes.get(index);
+			LocalPoint local = LocalPoint.fromWorld(client, npc.getWorldLocation());
+			WorldPoint location = null;
+			boolean isInInstance = false;
+			if (local != null)
+			{
+				location = BoatLocation.fromLocal(client, local);
+				isInInstance = client.isInInstancedRegion();
+			}
+			manager.storeEvent(new NpcRespawnData(index, npc.getId(), respawnTime, location, isInInstance));
+			if (logging)
+			{
+				manager.sendMessage(String.format("NPC %d: %d ticks", npc.getId(), respawnTime + 1));
+			}
+			seenNpcs.add(index);
+			npcDespawnTimes.remove(index);
+		}
+	}
 
-    @Subscribe
-    public void onNpcDespawned(NpcDespawned npcDespawned)
-    {
-        final NPC npc = npcDespawned.getNpc();
-        int index = npc.getIndex();
-        if (seenNpcs.contains(index)) {
-            return;
-        }
+	@Subscribe
+	public void onNpcDespawned(NpcDespawned npcDespawned)
+	{
+		final NPC npc = npcDespawned.getNpc();
+		int index = npc.getIndex();
+		if (seenNpcs.contains(index))
+		{
+			return;
+		}
 
-        if (isInViewRange(client.getLocalPlayer().getWorldLocation(), npc.getWorldLocation())) {
-            npcDespawnTimes.put(index, client.getTickCount());
-        }
-    }
+		if (isInViewRange(client.getLocalPlayer().getWorldLocation(), npc.getWorldLocation()))
+		{
+			npcDespawnTimes.put(index, client.getTickCount());
+		}
+	}
 
-    @Subscribe
-    public void onGameStateChanged(GameStateChanged event)
-    {
-        if (event.getGameState() == GameState.LOGIN_SCREEN ||
-                event.getGameState() == GameState.HOPPING)
-        {
-            npcDespawnTimes.clear();
-        }
-    }
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged event)
+	{
+		if (event.getGameState() == GameState.LOGIN_SCREEN ||
+				event.getGameState() == GameState.HOPPING)
+		{
+			npcDespawnTimes.clear();
+		}
+	}
 }

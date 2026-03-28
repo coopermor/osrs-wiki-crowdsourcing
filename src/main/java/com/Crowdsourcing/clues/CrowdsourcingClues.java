@@ -22,93 +22,110 @@ import java.util.HashSet;
 import java.util.List;
 
 @Slf4j
-public class CrowdsourcingClues {
-    @Inject
-    private Client client;
+public class CrowdsourcingClues
+{
+	@Inject
+	private Client client;
 
-    @Inject
-    private CrowdsourcingManager manager;
+	@Inject
+	private CrowdsourcingManager manager;
 
-    @Inject
-    private ItemManager itemManager;
+	@Inject
+	private ItemManager itemManager;
 
-    private HashSet<Integer> seenClues = new HashSet<>();
-    private Widget mapClueWidgetParent;
-    private Integer clueId = -1;
-    private String clueText;
-    private List<MapClueWidgetPart> parts;
+	private HashSet<Integer> seenClues = new HashSet<>();
+	private Widget mapClueWidgetParent;
+	private Integer clueId = -1;
+	private String clueText;
+	private List<MapClueWidgetPart> parts;
 
-    @Subscribe
-    private void onMenuOptionClicked(MenuOptionClicked event) {
-		if ("Read".equals(event.getMenuOption()) && event.getMenuAction() == CC_OP && event.getMenuEntry().getItemId() != -1) {
-            final ItemComposition itemComposition = itemManager.getItemComposition(event.getMenuEntry().getItemId());
-            if (itemComposition.getName().startsWith("Clue scroll") || itemComposition.getName().startsWith("Challenge scroll")) {
-                if (!seenClues.contains(itemComposition.getId())) {
-                    clueId = itemComposition.getId();
-                    if (clueId != ItemID.TRAIL_CLUE_MASTER && clueId != ItemID.TRAIL_CLUE_BEGINNER) {
-                        seenClues.add(clueId);
-                    }
-                }
-            }
-        }
-    }
+	@Subscribe
+	private void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		if ("Read".equals(event.getMenuOption()) && event.getMenuAction() == CC_OP && event.getMenuEntry().getItemId() != -1)
+		{
+			final ItemComposition itemComposition = itemManager.getItemComposition(event.getMenuEntry().getItemId());
+			if (itemComposition.getName().startsWith("Clue scroll") || itemComposition.getName().startsWith("Challenge scroll"))
+			{
+				if (!seenClues.contains(itemComposition.getId()))
+				{
+					clueId = itemComposition.getId();
+					if (clueId != ItemID.TRAIL_CLUE_MASTER && clueId != ItemID.TRAIL_CLUE_BEGINNER)
+					{
+						seenClues.add(clueId);
+					}
+				}
+			}
+		}
+	}
 
-    @Subscribe
-    public void onWidgetLoaded(WidgetLoaded event) {
-        int groupId = event.getGroupId();
-        for (int childId = 0; childId < 100; childId++) {
-            final Widget w = client.getWidget(groupId, childId);
-            if (w == null) {
-                break;
-            }
-            // These are the corners of the map clue. We couldn't figure out
-            // a better way to do this.
-            if (w.getModelId() == 3388) {
-                mapClueWidgetParent = w.getParent();
-            }
-        }
-    }
-    @Subscribe
-    public void onGameTick(GameTick event) {
-       if (clueId == -1) {
-           return;
-       }
-       final Widget clueTextWidget = client.getWidget(InterfaceID.TrailCluetext.TEXT);
-       if (clueTextWidget != null) {
-           String candidateClueText = clueTextWidget.getText();
-           if (clueId == ItemID.TRAIL_CLUE_MASTER && candidateClueText.equals(clueText)) {
-               clueId = -1;
-               return;
-           }
-           clueText = candidateClueText;
-           submitClue();
-           return;
-       }
+	@Subscribe
+	public void onWidgetLoaded(WidgetLoaded event)
+	{
+		int groupId = event.getGroupId();
+		for (int childId = 0; childId < 100; childId++)
+		{
+			final Widget w = client.getWidget(groupId, childId);
+			if (w == null)
+			{
+				break;
+			}
+			// These are the corners of the map clue. We couldn't figure out
+			// a better way to do this.
+			if (w.getModelId() == 3388)
+			{
+				mapClueWidgetParent = w.getParent();
+			}
+		}
+	}
+	@Subscribe
+	public void onGameTick(GameTick event)
+	{
+		if (clueId == -1)
+		{
+			return;
+		}
+		final Widget clueTextWidget = client.getWidget(InterfaceID.TrailCluetext.TEXT);
+		if (clueTextWidget != null)
+		{
+			String candidateClueText = clueTextWidget.getText();
+			if (clueId == ItemID.TRAIL_CLUE_MASTER && candidateClueText.equals(clueText))
+			{
+				clueId = -1;
+				return;
+			}
+			clueText = candidateClueText;
+			submitClue();
+			return;
+		}
 
-        if (mapClueWidgetParent != null) {
-            parts = new ArrayList<>();
-            for (Widget child : mapClueWidgetParent.getNestedChildren()) {
-                parts.add(new MapClueWidgetPart(
-                        child.getRelativeX(),
-                        child.getRelativeY(),
-                        child.getRotationX(),
-                        child.getRotationY(),
-                        child.getRotationZ(),
-                        child.getModelId(),
-                        child.getModelZoom()
-                ));
-            }
-            clueText = "";
-            submitClue();
-        }
-    }
+		if (mapClueWidgetParent != null)
+		{
+			parts = new ArrayList<>();
+			for (Widget child : mapClueWidgetParent.getNestedChildren())
+			{
+				parts.add(new MapClueWidgetPart(
+						child.getRelativeX(),
+						child.getRelativeY(),
+						child.getRotationX(),
+						child.getRotationY(),
+						child.getRotationZ(),
+						child.getModelId(),
+						child.getModelZoom()
+				));
+			}
+			clueText = "";
+			submitClue();
+		}
+	}
 
-    private void submitClue() {
-        manager.storeEvent(new ClueData(clueId, clueText, parts));
-        log.info("{}, {}, {}", clueId, clueText, parts);
-        clueId = -1;
-        parts = null;
-        mapClueWidgetParent = null;
+	private void submitClue()
+	{
+		manager.storeEvent(new ClueData(clueId, clueText, parts));
+		log.info("{}, {}, {}", clueId, clueText, parts);
+		clueId = -1;
+		parts = null;
+		mapClueWidgetParent = null;
 
-    }
+	}
 }

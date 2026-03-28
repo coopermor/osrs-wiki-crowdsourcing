@@ -8,9 +8,9 @@ import net.runelite.api.coords.WorldPoint;
 @AllArgsConstructor
 public class NpcRespawnData
 {
-    private int npcIndex;
-    private int npcId;
-    private int respawnTime;
-    private WorldPoint location;
-    private boolean isInInstance;
+	private int npcIndex;
+	private int npcId;
+	private int respawnTime;
+	private WorldPoint location;
+	private boolean isInInstance;
 }

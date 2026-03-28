@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ClueData
 {
-    private int clueId;
-    private String text;
-    private List<MapClueWidgetPart> parts;
+	private int clueId;
+	private String text;
+	private List<MapClueWidgetPart> parts;
 }

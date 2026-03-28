@@ -19,81 +19,84 @@ import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 @Slf4j
-public class MonsterExamineClient {
+public class MonsterExamineClient
+{
 
-    private static final String SUBMIT_URL = "https://chisel.weirdgloop.org/monsterexamine/submit";
-    private static final String SEEN_URL = "https://chisel.weirdgloop.org/monsterexamine/seen";
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+	private static final String SUBMIT_URL = "https://chisel.weirdgloop.org/monsterexamine/submit";
+	private static final String SEEN_URL = "https://chisel.weirdgloop.org/monsterexamine/seen";
+	private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private final MonsterExamine plugin;
+	private final MonsterExamine plugin;
 
 
-    @Inject
-    private MonsterExamineClient(MonsterExamine plugin)
-    {
-        this.plugin = plugin;
-    }
+	@Inject
+	private MonsterExamineClient(MonsterExamine plugin)
+	{
+		this.plugin = plugin;
+	}
 
-    protected void submitToAPI(MonsterExamineData data)
-    {
-        Request r = new Request.Builder()
-                .url(SUBMIT_URL)
-                .post(RequestBody.create(JSON, RuneLiteAPI.GSON.toJson(data)))
-                .build();
-        RuneLiteAPI.CLIENT.newCall(r).enqueue(new Callback()
-        {
-            @Override
-            public void onFailure(Call call, IOException e)
-            {
-                log.debug("Error sending monster examine data", e);
-            }
+	protected void submitToAPI(MonsterExamineData data)
+	{
+		Request r = new Request.Builder()
+				.url(SUBMIT_URL)
+				.post(RequestBody.create(JSON, RuneLiteAPI.GSON.toJson(data)))
+				.build();
+		RuneLiteAPI.CLIENT.newCall(r).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.debug("Error sending monster examine data", e);
+			}
 
-            @Override
-            public void onResponse(Call call, Response response)
-            {
-                log.info("Successfully sent monster examine data");
-                getSeenIds();
-                response.close();
-            }
-        });
-    }
+			@Override
+			public void onResponse(Call call, Response response)
+			{
+				log.info("Successfully sent monster examine data");
+				getSeenIds();
+				response.close();
+			}
+		});
+	}
 
-    protected void getSeenIds()
-    {
-        Request request = new Request.Builder()
-                .url(SEEN_URL)
-                .build();
+	protected void getSeenIds()
+	{
+		Request request = new Request.Builder()
+				.url(SEEN_URL)
+				.build();
 
-        RuneLiteAPI.CLIENT.newCall(request).enqueue(new Callback()
-        {
-            @Override
-            public void onFailure(Call call, IOException e)
-            {
-                log.debug("Error getting seen monster ids", e);
-            }
+		RuneLiteAPI.CLIENT.newCall(request).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.debug("Error getting seen monster ids", e);
+			}
 
-            @Override
-            public void onResponse(Call call, Response response)
-            {
-                try
-                {
-                    InputStream in = response.body().byteStream();
-                    Set<Integer> tmp = RuneLiteAPI.GSON.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), new TypeToken<Set<Integer>>(){}.getType());
-                    if (tmp == null)
-                    {
-                        log.debug("Error parsing monster ids JSON");
-                        response.close();
-                        return;
-                    }
-                    plugin.setSeenIds(tmp);
-                    response.close();
-                }
-                catch (JsonParseException ex)
-                {
-                    log.debug("Error parsing monster ids JSON", ex);
-                    response.close();
-                }
-            }
-        });
-    }
+			@Override
+			public void onResponse(Call call, Response response)
+			{
+				try
+				{
+					InputStream in = response.body().byteStream();
+					// CHECKSTYLE:OFF: LeftCurly
+					Set<Integer> tmp = RuneLiteAPI.GSON.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), new TypeToken<Set<Integer>>(){}.getType());
+					// CHECKSTYLE:ON: LeftCurly
+					if (tmp == null)
+					{
+						log.debug("Error parsing monster ids JSON");
+						response.close();
+						return;
+					}
+					plugin.setSeenIds(tmp);
+					response.close();
+				}
+				catch (JsonParseException ex)
+				{
+					log.debug("Error parsing monster ids JSON", ex);
+					response.close();
+				}
+			}
+		});
+	}
 }

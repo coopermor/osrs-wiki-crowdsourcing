@@ -33,9 +33,9 @@ import net.runelite.api.coords.WorldPoint;
 @AllArgsConstructor
 public class DoubleSpriteTextData
 {
-    private String text;
-    private int itemId1;
-    private int itemId2;
-    private final boolean isInInstance;
-    private final WorldPoint location;
+	private String text;
+	private int itemId1;
+	private int itemId2;
+	private final boolean isInInstance;
+	private final WorldPoint location;
 }

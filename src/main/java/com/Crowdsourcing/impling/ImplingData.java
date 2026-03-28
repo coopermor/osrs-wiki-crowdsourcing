@@ -8,7 +8,7 @@ import net.runelite.api.coords.WorldPoint;
 @AllArgsConstructor
 public class ImplingData
 {
-    private int npcId;
-    private int oldNpcId;
-    private WorldPoint location;
+	private int npcId;
+	private int oldNpcId;
+	private WorldPoint location;
 }

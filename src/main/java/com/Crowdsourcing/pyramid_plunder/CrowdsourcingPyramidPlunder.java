@@ -160,7 +160,8 @@ public class CrowdsourcingPyramidPlunder
 		.add(ObjectID.NTK_TOMB_DOOR_NOANIM).add(ObjectID.NTK_TOMB_DOOR_ANIM)
 		.add(ObjectID.NTK_TOMB_DOOR_EXIT).add(ObjectID.NTK_ANTECHAMBER_EXIT).build();
 	@Subscribe
-	private void onMenuOptionClicked(MenuOptionClicked event) {
+	private void onMenuOptionClicked(MenuOptionClicked event)
+	{
 		int tick = client.getTickCount();
 		if (event.getMenuAction() == GAME_OBJECT_FIRST_OPTION || event.getMenuAction() == GAME_OBJECT_SECOND_OPTION)
 		{
